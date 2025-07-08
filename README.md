@@ -36,38 +36,56 @@ Oracle DB의 EMP 테이블을 기준으로, 다양한 조건을 조합해 복잡
 
 ## 🔍 문제 목록
 
-## 🔹 문제 1. 연봉 계산 및 조건 필터링
-
-- 입사일: 1980년 1월 1일 ~ 1982년 12월 31일
-- 직업: `SALESMAN`, `CLERK`
-- comm이 `NULL`인 경우 `0` 처리
-- 이름에 'M' 또는 'm'이 포함된 사원만
-- 이름은 대문자로 출력
-- 정렬: 연봉 내림차순 → 이름 오름차순
+### 💡 문제 1: 이름에 M 포함 + 특정 직업군 + 연봉 계산
+```
+/****************************************************************************************
+ * 출력 항목
+ * - 사번(empno)
+ * - 사원명(ename, 대문자 변환)
+ * - 직업(job)
+ * - 입사일(hiredate)
+ * - 부서번호(deptno)
+ * - 월급여(sal)
+ * - 커미션(comm)
+ * - 연봉(sal*12 + NVL(comm, 0)) AS annual_salary
+ *
+ * 조건
+ * - 입사일이 1980년 1월 1일부터 1982년 12월 31일 사이
+ * - 직업이 'SALESMAN' 또는 'CLERK'
+ * - 이름에 'M' 또는 'm'이 포함된 사원만 조회
+ *
+ * 정렬
+ * - 연봉 내림차순
+ * - 연봉이 같을 경우 이름 오름차순
+ ****************************************************************************************/
+```
 
 <details>
-<summary>📄 SQL 풀이 보기</summary>
+<summary>✅ 정답 보기</summary>
 
 ```sql
-SELECT
-  empno AS "사번",
-  UPPER(ename) AS "사원명",
-  job AS "직업",
-  hiredate AS "입사일",
-  deptno AS "부서번호",
-  sal AS "월 급여",
-  comm AS "커미션",
-  sal*12 + NVL(comm, 0) AS "연봉"
-FROM emp
-WHERE hiredate BETWEEN DATE '1980-01-01' AND DATE '1982-12-31'
-  AND job IN ('SALESMAN', 'CLERK')
-  AND UPPER(ename) LIKE '%M%'
-ORDER BY
-  "연봉" DESC,
-  "사원명" ASC;
+SELECT empno,
+       UPPER(ename)             AS ename,
+       job,
+       hiredate,
+       deptno,
+       sal,
+       comm,
+       sal * 12 + NVL(comm, 0)  AS annual_salary
+FROM   emp
+WHERE  hiredate BETWEEN TO_DATE('1980-01-01', 'YYYY-MM-DD') AND TO_DATE('1982-12-31', 'YYYY-MM-DD')
+  AND  job IN ('SALESMAN', 'CLERK')
+  AND  (ename LIKE '%M%' OR ename LIKE '%m%')
+ORDER BY annual_salary DESC,
+         ename ASC;
+```
+
+</details>
+
+---
 
 ### 💡 문제 2: 커미션이 존재하는 부서 10번 사원 조회
-\`\`\`sql
+```
 /****************************************************************************************
  * 출력 항목
  * - 사원명(ename)
@@ -84,10 +102,30 @@ ORDER BY
  * - 커미션 내림차순
  * - 커미션이 같을 경우 입사일 오름차순
  ****************************************************************************************/
-\`\`\`
+```
+
+<details>
+<summary>✅ 정답 보기</summary>
+
+```sql
+SELECT ename,
+       deptno,
+       comm,
+       hiredate
+FROM   emp
+WHERE  deptno   = 10
+  AND  comm    IS NOT NULL
+  AND  hiredate > TO_DATE('1981-09-01','YYYY-MM-DD')
+ORDER  BY comm DESC,
+          hiredate ASC;
+```
+
+</details>
+
+---
 
 ### 💡 문제 3: 부서 30번의 특정 조건을 만족하는 SALESMAN 조회
-\`\`\`sql
+```
 /****************************************************************************************
  * 출력 항목
  * - 사번(empno)
@@ -107,10 +145,34 @@ ORDER BY
  * 정렬
  * - 입사일 오름차순
  ****************************************************************************************/
-\`\`\`
+```
+
+<details>
+<summary>✅ 정답 보기</summary>
+
+```sql
+SELECT empno,
+       ename,
+       job,
+       hiredate,
+       deptno,
+       sal,
+       comm
+FROM   emp
+WHERE  deptno = 30
+  AND  job    = 'SALESMAN'
+  AND  sal BETWEEN 1000 AND 2500
+  AND  comm IS NOT NULL
+  AND  comm  > 0
+ORDER  BY hiredate ASC;
+```
+
+</details>
+
+---
 
 ### 💡 문제 4: 이름에 M 포함 + 1982년 이후 입사자 + 연봉 기준 정렬
-\`\`\`sql
+```
 /****************************************************************************************
  * 출력 항목
  * - 사번(empno)
@@ -129,20 +191,29 @@ ORDER BY
  * 정렬
  * - 연봉 내림차순
  ****************************************************************************************/
-\`\`\`
+```
 
-<br>
+<details>
+<summary>✅ 정답 보기</summary>
 
-## 📎 파일 구성
+```sql
+SELECT empno,
+       UPPER(ename)                 AS ename,
+       job,
+       hiredate,
+       sal,
+       comm,
+       sal*12 + NVL(comm,0)         AS annual_salary
+FROM   emp
+WHERE  (ename LIKE '%M%' OR ename LIKE '%m%')
+  AND  job IN ('SALESMAN','CLERK')
+  AND  hiredate >= TO_DATE('1982-01-01','YYYY-MM-DD')
+ORDER  BY annual_salary DESC;
+```
 
-\`\`\`bash
-📁 sql-conditional-query-practice/
-├── README.md
-├── problem1_salary_with_comm.sql
-├── problem2_comm_in_dept10.sql
-├── problem3_salesman_in_dept30.sql
-└── problem4_m_in_name_query.sql
-\`\`\`
+</details>
+
+---
 
 <br>
 
