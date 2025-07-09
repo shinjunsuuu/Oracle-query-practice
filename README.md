@@ -1,5 +1,9 @@
-# Oracle-query-practice
-Oracle DB 쿼리문 연습 예제입니다.
+# 📘 SQL 조건 문제 미니 프로젝트
+
+> 실무에서 자주 활용되는 SQL 조건문 작성 능력을 기르기 위한 미니 프로젝트입니다.  
+Oracle DB의 EMP 테이블을 기준으로, 다양한 조건을 조합해 복잡한 조회 쿼리를 설계하고 주석 기반 문제 정의를 연습했습니다.
+
+<br>
 
 
 ## 👥 Team Members
@@ -12,12 +16,6 @@ Oracle DB 쿼리문 연습 예제입니다.
 | <img src="https://github.com/Minkyoungg0.png" width="40"/> | 문민경 | [@Minkyoungg0](https://github.com/Minkyoungg0) |
 
 
-# 📘 SQL 조건 문제 미니 프로젝트
-
-> 실무에서 자주 활용되는 SQL 조건문 작성 능력을 기르기 위한 미니 프로젝트입니다.  
-Oracle DB의 EMP 테이블을 기준으로, 다양한 조건을 조합해 복잡한 조회 쿼리를 설계하고 주석 기반 문제 정의를 연습했습니다.
-
-<br>
 
 ## ✅ 프로젝트 목적
 
